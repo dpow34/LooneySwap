@@ -65,6 +65,9 @@ function tokenCheck(){
 	var srcTokenValue = srcAmount.value;
 	var defaultValue = "Choose a Token";
 	if (srcTokenSymbol == defaultValue || destTokenSymbol == defaultValue || srcTokenValue.length == 0 || srcTokenSymbol == destTokenSymbol){
+		if (srcTokenSymbol == destTokenSymbol){
+			destinAmount.value = "";
+		}
 		return;
 	}
 	setUpURL(srcTokenSymbol, destTokenSymbol, srcTokenValue);
