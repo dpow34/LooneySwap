@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="UTF-8">
+<head>
+	<title>LooneySwap</title>
+</head>
+<body>
+	<form>
+		<label for="srcToken">Source token:</label>
+		<select name="srcToken" id="srcToken" onchange="tokenCheck()">
+			<option>Choose a Token</option>
+		</select>
+		<input type="text" name="srcAmount" id="srcAmount" onchange="tokenCheck()">
+		<br>
+		<label for="destToken">Destination Token:</label>
+		<select name="destToken" id="destToken" onchange="tokenCheck()">
+			<option>Choose a Token</option>
+		</select>
+		<input type="text" name="destAmount" id="destAmount" readonly="readonly">
+		<br>
+		**Values based on Ropsten token value
+		<br>	
+		<button>Swap Tokens</button>
+	</form>
+<script src="tokenRatePairs.js"></script>
+</body>
+</html>
