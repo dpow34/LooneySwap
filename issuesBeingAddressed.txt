@@ -9,6 +9,8 @@ CBAT -> same as WBTC
 WETH
 SBTC
 
+Decimal point in wrong place for some exchanges
+
 Accuracy needs to be checked for succesful conversions. Tough because hard to find value of token on Ropsten.
 ETH -> DAI gives same value as Charlie's swap (good)
 
