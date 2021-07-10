@@ -2,8 +2,6 @@ KNOWN ISSUES
 -----------------------------------------------------------
 SOME COINS NEED TO BE DISABLED IN DROPDOWN - WHEN SRC IS X COIN, THEN ONLY SOME COINS WORK FOR CONVERSION - more testing needs to be done
 
-Some transactions are not building
-
 Would like to make it where if same token is selected in 2nd drop down then first drop down goes blank
 
 Accuracy needs to be checked for succesful conversions. Tough because hard to find value of token on Ropsten.
