@@ -64,9 +64,9 @@ function createDict(jsonToken) {
         tokenDescriptors.push(jsonToken.tokens[i].decimals);
         tokenDescriptors.push(jsonToken.tokens[i].img);
     	tokenDict[symbol] = tokenDescriptors;
-        if (symbol == "WETH" || symbol == "sBTC") {
-            delete tokenDict[symbol];
-        }
+        // if (symbol == "WETH" || symbol == "sBTC") {
+        //     delete tokenDict[symbol];
+        // }
     }
 }
 
@@ -156,6 +156,7 @@ function callAPI(url) {
         }
         // error handling
         else {
+            destinAmount.value = "";
             if (jsonResponse.error == "Invalid Amount"){
                 document.getElementById('errorText').innerHTML = 'TOO MUCH TO SWAP';
             }
