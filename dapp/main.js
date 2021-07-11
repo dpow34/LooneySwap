@@ -14,29 +14,6 @@ function init() {
 	destinAmount.value = "";
 }
 
-// diables drop down value based on other drop down
-// EX: if ETH is selected in one drop down it will be disabled in another
-// needs work - Would like to make it where if same token is selected in 
-// 2nd drop down then first drop down goes blank
-$(document).ready(function() {
-    $(".tokenSelect").change(function() {
-        // Get the selected value
-        var selected = $("option:selected", $(this)).val();
-        // Get the ID of this element
-        var thisID = $(this).prop("id");
-        // Reset so all values are showing:
-        $(".tokenSelect option").each(function() {
-            $(this).prop("disabled", false);
-        });
-        $(".tokenSelect").each(function() {
-            if ($(this).prop("id") != thisID) {
-                $("option[value='" + selected + "']", $(this)).prop("disabled", true);
-            }
-        });
-
-    });
-});
-
 // gets token list
 var request = new XMLHttpRequest();
 request.open('GET', 'https://apiv4.paraswap.io/v2/tokens/3');
@@ -95,6 +72,28 @@ function destDropDown(key){
 	destToken.appendChild(el);
 }
 
+// changes destDropDown to default if user changed srcDropDown to equal destDropDown
+function srcDropDownCheck(){
+    srcToken = document.getElementById("srcToken");
+    destToken = document.getElementById("destToken");
+    if (srcToken.value == destToken.value) {
+        destToken.selectedIndex = 0;
+        destinAmount.value = "";
+    }
+    tokenCheck();
+}
+
+// changes srcDropDown to default if user changed destDropDown to eqaul srcDropDown
+function destDropDownCheck(){
+    srcToken = document.getElementById("srcToken");
+    destToken = document.getElementById("destToken");
+    if (srcToken.value == destToken.value) {
+        srcToken.selectedIndex = 0;
+        destinAmount.value = "";
+    }
+    tokenCheck();
+}
+
 // checks if all necessary inputs are filled out for swap calculation
 function tokenCheck(amount = 0){
     var srcTokenValue = document.getElementById("srcAmount").value;
@@ -105,7 +104,7 @@ function tokenCheck(amount = 0){
     }
 	var defaultValue = "Choose a Token";
 	if (srcTokenSymbol == defaultValue || destTokenSymbol == defaultValue || srcTokenValue == undefined || srcTokenSymbol == destTokenSymbol){
-		if (srcTokenSymbol == destTokenSymbol || srcTokenValue == undefined){
+		if (srcTokenValue == undefined){
 			destinAmount.value = "";
 		}
 		return;
@@ -133,7 +132,6 @@ var convertedNumber; // global to be used for sending transaction
 // sets up URL for API call for token pair rates
 function setUpURL(srcTokenSymbol, destTokenSymbol, srcTokenValue) {
 	convertedNumber = convertForTransaction(srcTokenValue);
-    console.log(convertedNumber);
 	var srcTokenAddress = tokenDict[srcTokenSymbol][0];
 	var destTokenAddress = tokenDict[destTokenSymbol][0];
 	var url = `https://apiv4.paraswap.io/v2/prices?network=3&from=${srcTokenAddress}&to=${destTokenAddress}&amount=${convertedNumber}&side=SELL`;
