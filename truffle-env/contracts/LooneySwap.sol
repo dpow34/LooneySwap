@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 // may need to remove "../node_modules/" before compilation and migration
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract LooneySwap {
     using SafeMath for uint256;
@@ -23,12 +23,12 @@ contract LooneySwap {
     address[] public LQProviders;
 
     // getter function s
-    function getLQProviders() external view returns(LQProviders[] memory) {
+    function getLQProviders() external view returns(address[] memory) {
         return LQProviders;
     }
 
-    function getLQBalances(address LQProvider) external view returns(LQProviders[] memory) {
-        return LQBalances[LQProvider];
+    function getLQBalances(address LQProvider) external view returns(LQProvision[] memory) {
+        return LPBalances[LQProvider];
     }
 
     // helper function checking to make sure an address is actually a liquidity provider
