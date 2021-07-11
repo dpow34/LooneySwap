@@ -1,8 +1,9 @@
 KNOWN ISSUES
 -----------------------------------------------------------
-SOME COINS NEED TO BE DISABLED IN DROPDOWN - WHEN SRC IS X COIN, THEN ONLY SOME COINS WORK FOR CONVERSION - more testing needs to be done
+SOME COINS NEED TO BE DISABLED IN DROPDOWN - WHEN SRC IS X COIN, THEN ONLY SOME COINS WORK FOR CONVERSION
+See below for details.
 
-Conversions not working:
+Conversions that give errors:
 ETH -> WBTC
 ETH -> WETH
 ETH -> sBTC
@@ -15,16 +16,139 @@ DAI -> sUSD
 DAI -> sBTC
 DAI -> OMG
 DAI -> ELF
-DAI -> BAT - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime
+DAI -> BAT - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
 DAI -> MANA
-DAI -> ZRX - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime
+DAI -> ZRX - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
 DAI -> LINK
 DAI -> SNX
 DAI -> cSAI
 DAI -> cBAT
 
-STILL WOKING ON MORE TESTING
+sUSD -> WBTC
+sUSD -> DAI
+sUSD -> sBTC
+sUSD -> KNC
+sUSD -> OMG
+sUSD -> ELF
+sUSD -> BAT
+sUSD -> MANA
+sUSD -> ZRX
+sUSD -> LINK
+sUSD -> SNX
+sUSD -> cSAI
+sUSD -> cBAT
 
+WETH -> ETH
+WETH -> WBTC
+WETH -> sBTC
+WETH -> SNX
+WETH -> cSAI
+WETH -> cBAT
+
+sBTC -> ALL tokens
+
+KNC -> WBTC
+KNC -> DAI - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
+KNC -> sUSD
+KNC -> sBTC
+KNC -> OMG
+KNC -> ELF
+KNC -> BAT
+KNC -> MANA
+KNC -> ZRX
+KNC -> LINK - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
+KNC -> SNX
+KNC -> cSAI
+KNC -> cBAT
+
+OMG -> WBTC
+OMG -> DAI
+OMG -> sUSD
+OMG -> sBTC
+OMG -> KNC
+OMG -> ELF
+OMG -> BAT
+OMG -> MANA
+OMG -> ZRX
+OMG -> SNX
+OMG -> LINK
+OMG -> cSAI
+OMG -> cBAT
+
+ELF -> WBTC
+ELF -> DAI
+ELF -> sUSD
+ELF -> sBTC
+ELF -> KNC
+ELF -> OMG
+ELF -> BAT
+ELF -> MANA
+ELF -> ZRX
+ELF -> LINK
+ELF -> SNX
+ELF -> cSAI
+ELF -> cBAT
+
+BAT -> WBTC
+BAT -> sUSD
+BAT -> sBTC
+BAT -> KNC
+BAT -> OMG
+BAT -> ELF
+BAT -> MANA
+BAT -> ZRX
+BAT -> LINK
+BAT -> SNX
+BAT -> cSAI
+BAT -> cBAT
+
+MANA -> WBTC
+MANA -> DAI
+MANA -> sUSD
+MANA -> sBTC
+MANA -> KNC
+MANA -> OMG
+MANA -> ELF
+MANA -> BAT
+MANA -> ZRX
+MANA -> LINK
+MANA -> SNX
+MANA -> cSAI
+MANA -> cBAT
+
+ZRX -> WBTC
+ZRX -> sUSD
+ZRX -> sBTC
+ZRX -> KNC
+ZRX -> OMG
+ZRX -> ELF
+ZRX -> BAT
+ZRX -> MANA
+ZRX -> LINK
+ZRX -> SNX
+ZRX -> cSAI
+ZRX -> cBAT
+
+LINK -> WBTC
+LINK -> DAI
+LINK -> sUSD
+LINK -> sBTC
+LINK -> OMG
+LINK -> ELF
+LINK -> BAT
+LINK -> MANA
+LINK -> ZRX
+LINK -> SNX
+LINK -> cSAI
+LINK -> cBAT
+
+SNX -> All tokens
+
+WBTC -> All tokens
+
+cBAT -> All tokens
+
+cSAI -> All tokens
 
 
 Accuracy needs to be checked for succesful conversions. Tough because hard to find value of token on Ropsten.
