@@ -16,14 +16,14 @@
     <div class="form">
     <form>
       <label for="srcToken">Source token:</label>
-      <select name="srcToken" id="srcToken" class="tokenSelect" onchange="tokenCheck()">
+      <select name="srcToken" id="srcToken" class="tokenSelect" onchange="srcDropDownCheck()">
         <option>Choose a Token</option>
       </select>
       <input type="number" name="srcAmount" id="srcAmount" oninput="validate()">
       <span id="errorText"></span>
       <br>
       <label for="destToken">Destination Token:</label>
-      <select name="destToken" id="destToken" class="tokenSelect" onchange="tokenCheck()">
+      <select name="destToken" id="destToken" class="tokenSelect" onchange="destDropDownCheck()">
         <option>Choose a Token</option>
       </select>
       <input type="text" name="destAmount" id="destAmount" readonly="readonly">
