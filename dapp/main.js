@@ -280,7 +280,7 @@ const DAI = {
         network: 3
     }
 
-const amount = 10*10**18; // 1 DAI to exchange for ETH
+// const amount = 10*10**18; // 1 DAI to exchange for ETH
 
 $(document).ready(function() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
@@ -322,7 +322,7 @@ async function exchange(account, priceRoute) {
         srcDecimals: tokenDict[srcToken.value][1],
         destToken: tokenDict[destToken.value][0],
         destDecimals: tokenDict[destToken.value][1],
-        srcAmount: amount.toFixed(0),
+        srcAmount: convertedNumber.toFixed(0),
         destAmount,
         userAddress: account,
         referrer: 'LooneySwap',
@@ -360,6 +360,7 @@ async function approveToken(tokenAddress, contractAddress, account, amount) {
         contractInstance = new web3.eth.Contract(erc20ABI, tokenAddress, {from: account});
         return await contractInstance.methods.approve(contractAddress, amount).send();
     } else {
+        console.log(1);
         return true;
     } 
 }
