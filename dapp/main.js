@@ -189,13 +189,17 @@ function countDecimalPlaces(srcTokenValue) {
 function convertForTransaction(srcTokenValue) {
 	var decimals = 0;
 	var numberForTransaction;
+    var denomination = 18;
+    if (srcToken.value == "WBTC" || srcToken.value == "cSAI" || srcToken.value == "cBAT") {
+        denomination = 8;
+    }
 	if (srcTokenValue[0] == "."){
 		decimals = countDecimalPlaces(srcTokenValue);
 		var multiplier = srcTokenValue*10;
-		numberForTransaction = (10**(18-decimals))*multiplier;
+		numberForTransaction = (10**(denomination-decimals))*multiplier;
 		return numberForTransaction;
 	}
-	numberForTransaction = (10**18)*srcTokenValue;
+	numberForTransaction = (10**denomination)*srcTokenValue;
 	return numberForTransaction;
 }
 
