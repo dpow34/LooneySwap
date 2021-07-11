@@ -10,7 +10,7 @@ ETH -> DAI gives same value as Charlie's swap (good)
 
 Clean up code!!!!!!     
 
-CONFUSED IF FIXED: Decimal point in wrong place for some exchanges
+CONFUSED IF FIXED (looks fixed): Decimal point in wrong place for some exchanges
 
 -----------------------------------------------------------
 FIXED ISSUES
