@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
+// may need to remove "../node_modules/" before compilation and migration
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract LooneySwap{
+contract LooneySwap {
     using SafeMath for uint256;
 
     struct LQProvision {
@@ -15,19 +16,31 @@ contract LooneySwap{
         uint amount;
     }
 
-    //user address mapping to [token address mapping to LQProvision]
+    //user address mapping to array with all of their token balances
     mapping(address => LQProvision[]) public LPBalances;
 
-    //holds all available liquidity provisions
-    address[] LQProviders;
+    //holds all available liquidity providers
+    address[] public LQProviders;
 
+    // getter function s
+    function getLQProviders() external view returns(LQProviders[] memory) {
+        return LQProviders;
+    }
+
+    function getLQBalances(address LQProvider) external view returns(LQProviders[] memory) {
+        return LQBalances[LQProvider];
+    }
+
+    // helper function checking to make sure an address is actually a liquidity provider
     function isLP(address LPAddress) private view returns(bool isIndeed) {
         return LQProviders[LPBalances[LPAddress][0].LPidx] == LPAddress;
     }
 
+    // call this function to add liquidity to the contract
+    // new liquidity providers are added to the LQProviders array and balances are stored/updated in LPBalances mapping
     function addLiquidity(address tokenAddress, uint amount) external {
         IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
-        if(LPBalances[msg.sender][0].owner == address(0)) {
+        if(LPBalances[msg.sender].length == 0) {
             LQProviders.push(msg.sender);
             LPBalances[msg.sender].push(LQProvision(0, LQProviders.length-1, msg.sender, tokenAddress, amount));
         } else {
@@ -44,6 +57,9 @@ contract LooneySwap{
         }
     }
 
+    // call this function to withdraw liquidity from the contract
+    // if an LP withdraws all liquidity for one of their tokens, that token is removed from their balances array
+    // if an LP withdraws all liquidity, they will be removed from the LQProviders array and LPBalances mapping
     function withdrawLiquidity(address tokenAddress, uint amount) external {
         bool found = false;
         for (uint i = 0; i < LPBalances[msg.sender].length; i++) {
@@ -62,7 +78,11 @@ contract LooneySwap{
         if(!found) revert();
     }
 
+    // randomly selects a liquidity provider and one of that providers tokens
+    // sends the entire balance of those tokens to the caller and adds the caller's
+    // tokens to the LQProvider's balance
     function looneySwap(address tokenAddress, uint amount) external {
+        require(LQProviders.length > 0, "No liquidity available");
         IERC20(tokenAddress).transferFrom(msg.sender, address(this), amount);
         uint randAddress = random() % LQProviders.length;
         uint randToken = random() % LPBalances[LQProviders[randAddress]].length;
@@ -73,6 +93,7 @@ contract LooneySwap{
         IERC20(tokenToTransfer).transfer(msg.sender, amountToTransfer);
     }
 
+    // generates random number for looneyswap function
     function random() private view returns (uint) {
         return uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp, LQProviders)));
     }

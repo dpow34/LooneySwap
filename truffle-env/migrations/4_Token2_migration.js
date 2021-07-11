@@ -1,5 +1,5 @@
-const Token2 = artifacts.require("Token2");
+const Aave = artifacts.require("Aave");
 
 module.exports = function (deployer) {
-  deployer.deploy(Token2);
+  deployer.deploy(Aave);
 };

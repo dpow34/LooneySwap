@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// may need to remove "../node_modules/" before compilation and migration
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract Link is ERC20 {
+contract Aave is ERC20 {
     constructor() ERC20("Aave", "AAVE") public {
         _mint(msg.sender, 1000);
     }

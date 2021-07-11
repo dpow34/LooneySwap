@@ -1,5 +1,5 @@
-const Token1 = artifacts.require("Token1");
+const Link = artifacts.require("Link");
 
 module.exports = function (deployer) {
-  deployer.deploy(Token1);
+  deployer.deploy(Link);
 };
