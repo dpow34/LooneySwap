@@ -1,0 +1,191 @@
+KNOWN ISSUES
+-----------------------------------------------------------
+SOME COINS NEED TO BE DISABLED IN DROPDOWN - WHEN SRC IS X COIN, THEN ONLY SOME COINS WORK FOR CONVERSION
+See below for details.
+
+Conversions that give errors:
+ETH -> WBTC
+ETH -> WETH
+ETH -> sBTC
+ETH -> SNX
+ETH -> cSAI
+ETH -> cBAT
+
+DAI -> WBTC
+DAI -> sUSD
+DAI -> sBTC
+DAI -> OMG
+DAI -> ELF
+DAI -> BAT - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
+DAI -> MANA
+DAI -> ZRX - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
+DAI -> LINK
+DAI -> SNX
+DAI -> cSAI
+DAI -> cBAT
+
+sUSD -> WBTC
+sUSD -> DAI
+sUSD -> sBTC
+sUSD -> KNC
+sUSD -> OMG
+sUSD -> ELF
+sUSD -> BAT
+sUSD -> MANA
+sUSD -> ZRX
+sUSD -> LINK
+sUSD -> SNX
+sUSD -> cSAI
+sUSD -> cBAT
+
+WETH -> ETH
+WETH -> WBTC
+WETH -> sBTC
+WETH -> SNX
+WETH -> cSAI
+WETH -> cBAT
+
+sBTC -> ALL tokens
+
+KNC -> WBTC
+KNC -> DAI - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
+KNC -> sUSD
+KNC -> sBTC
+KNC -> OMG
+KNC -> ELF
+KNC -> BAT
+KNC -> MANA
+KNC -> ZRX
+KNC -> LINK - ESTIMATED_LOSS_GREATER_THAN_MAX_IMPACT everytime for every value
+KNC -> SNX
+KNC -> cSAI
+KNC -> cBAT
+
+OMG -> WBTC
+OMG -> DAI
+OMG -> sUSD
+OMG -> sBTC
+OMG -> KNC
+OMG -> ELF
+OMG -> BAT
+OMG -> MANA
+OMG -> ZRX
+OMG -> SNX
+OMG -> LINK
+OMG -> cSAI
+OMG -> cBAT
+
+ELF -> WBTC
+ELF -> DAI
+ELF -> sUSD
+ELF -> sBTC
+ELF -> KNC
+ELF -> OMG
+ELF -> BAT
+ELF -> MANA
+ELF -> ZRX
+ELF -> LINK
+ELF -> SNX
+ELF -> cSAI
+ELF -> cBAT
+
+BAT -> WBTC
+BAT -> sUSD
+BAT -> sBTC
+BAT -> KNC
+BAT -> OMG
+BAT -> ELF
+BAT -> MANA
+BAT -> ZRX
+BAT -> LINK
+BAT -> SNX
+BAT -> cSAI
+BAT -> cBAT
+
+MANA -> WBTC
+MANA -> DAI
+MANA -> sUSD
+MANA -> sBTC
+MANA -> KNC
+MANA -> OMG
+MANA -> ELF
+MANA -> BAT
+MANA -> ZRX
+MANA -> LINK
+MANA -> SNX
+MANA -> cSAI
+MANA -> cBAT
+
+ZRX -> WBTC
+ZRX -> sUSD
+ZRX -> sBTC
+ZRX -> KNC
+ZRX -> OMG
+ZRX -> ELF
+ZRX -> BAT
+ZRX -> MANA
+ZRX -> LINK
+ZRX -> SNX
+ZRX -> cSAI
+ZRX -> cBAT
+
+LINK -> WBTC
+LINK -> DAI
+LINK -> sUSD
+LINK -> sBTC
+LINK -> OMG
+LINK -> ELF
+LINK -> BAT
+LINK -> MANA
+LINK -> ZRX
+LINK -> SNX
+LINK -> cSAI
+LINK -> cBAT
+
+SNX -> All tokens
+
+WBTC -> All tokens
+
+cBAT -> All tokens
+
+cSAI -> All tokens
+
+
+Accuracy needs to be checked for succesful conversions. Tough because hard to find value of token on Ropsten.
+ETH -> DAI gives same value as Charlie's swap (good)
+
+Clean up code!!!!!!     
+
+CONFUSED IF FIXED: Decimal point in wrong place for some exchanges
+
+-----------------------------------------------------------
+FIXED ISSUES
+-----------------------------------------------------------
+
+FIXED w/ error handling:
+ELF -> shows conversion, but shows 400 Bad Request in console
+MANA -> same as ELF
+ZRX -> same as ELF
+SNX -> same as ELF
+WBTC -> possibly because 8 instead of 18 for smallest denomination (probably not though)
+CSAI -> same as WBTC
+CBAT -> same as WBTC
+WETH -> computePrice error no matter the value - removed
+sBTC -> same as WETH - removed
+
+
+
+If src token value is a decimal value, and then you highlight and type a decimal, input won't work becuase
+it thinks you're typing 2 decimals (not allowed). Example: If 5.55 is entered in src text box, then if you highlight
+it and type a decimal point as the first value it won't do anything.
+
+Can't paste values into src text box
+
+If src and dest token are same token, program just does nothing. I'd like to get it where it eliminates selected token
+from other dropdown like Uniswap. Example: If you select ETH for src, then ETH should not be able to be selected in dest. 
+
+Would like to make it where if same token is selected in 2nd drop down then first drop down goes blank
+
+Users should not have to click off the input text box to get conversion. Should do it as the user is entering values.
+
+Errors when building transactions with certain tokens
