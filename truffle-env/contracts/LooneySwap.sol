@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 // may need to remove "../node_modules/" before compilation and migration
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract LooneySwap {
     using SafeMath for uint256;
@@ -72,7 +72,7 @@ contract LooneySwap {
                 if(LPBalances[msg.sender][i].amount == 0) {
                     deleteLQProvision(msg.sender, tokenAddress);
                 }
-                IERC20(LPBalances[msg.sender][i].token).transfer(msg.sender, amount);
+                IERC20(tokenAddress).transfer(msg.sender, amount);
             }
         }
         if(!found) revert();
@@ -105,8 +105,7 @@ contract LooneySwap {
         if(LPBalances[LPAddress].length == 1) {
             if(LPBalances[LPAddress][0].token == tokenAddress) {
                 deleteLQProvider(LPAddress);
-                delete LPBalances[LPAddress][0];
-                delete LPBalances[LPAddress];
+                LPBalances[LPAddress].pop();
                 return true;
             } else {
                 revert("This address does not hold this token");
@@ -122,8 +121,8 @@ contract LooneySwap {
         }
         if(!found) revert("This address does not hold this token");
         LQProvision memory toMove = LPBalances[LPAddress][LPBalances[LPAddress].length-1];
+        toMove.idx = toDelete;
         LPBalances[LPAddress][toDelete] = toMove;
-        delete LPBalances[LPAddress][LPBalances[LPAddress].length-1];
         LPBalances[LPAddress].pop();
         return true;
     }
@@ -131,13 +130,13 @@ contract LooneySwap {
     //this function should only be called by deleteLQProvision. if the last LQProvision is withdrawn
     //for a given LQProvider then deleteLQProvider will be called.
     function deleteLQProvider(address LPAddress) private returns(bool success) {
-        require(isLP(LPAddress), "This assdess is not a liqiudity provider");
+        require(isLP(LPAddress), "This address is not a liqiudity provider");
         uint toDelete = LPBalances[LPAddress][0].LPidx;
         address toMove = LQProviders[LQProviders.length-1];
-        LQProviders[toDelete] = toMove;
         if(LPAddress != toMove) {
+            LQProviders[toDelete] = toMove;
             for (uint i = 0; i < LPBalances[toMove].length; i++) {
-            LPBalances[toMove][i].LPidx = toDelete;
+                LPBalances[toMove][i].LPidx = toDelete;
             }
         }
         LQProviders.pop();
