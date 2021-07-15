@@ -1,3 +1,14 @@
+// simple html/css animation/dropdown & interactive window 
+$(document).ready(function() {
+    const menu = document.querySelector('#dropdown_option')
+    const choices = document.querySelector('.navbar_categories')
+    menu.addEventListener('click', function(){
+        menu.classList.toggle('isActive');
+        choices.classList.toggle('active');
+    });
+});
+
+
 // Token Lists with Rates
 
 var srcToken = document.getElementById("srcToken"); 
@@ -292,6 +303,9 @@ $(document).ready(function() {
             event.preventDefault();
             getPriceRoute(accounts[0]);
         });
+        // truncate user account number to display on webpage
+        const accountStr = accounts[0];
+        document.getElementById("account_number").innerHTML = accountStr.slice(accountStr.length) + accountStr.slice(0, 6) + '...' + accountStr.slice(accountStr.length - 4);
     });
 });
 
