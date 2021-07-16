@@ -22,7 +22,7 @@ contract LooneySwap {
     //holds all available liquidity providers
     address[] public LQProviders;
 
-    // getter function s
+    // getter function
     function getLQProviders() external view returns(address[] memory) {
         return LQProviders;
     }
@@ -47,13 +47,13 @@ contract LooneySwap {
             bool added = false;
             for (uint i = 0; i < LPBalances[msg.sender].length; i++) {
                 if(LPBalances[msg.sender][i].token == tokenAddress) {
-                    LPBalances[msg.sender][i].amount.add(amount);
+                    LPBalances[msg.sender][i].amount = SafeMath.add(LPBalances[msg.sender][i].amount, amount);
                     added = true;
                 }
-                if(!added) {
-                    LPBalances[msg.sender].push(LQProvision(LPBalances[msg.sender].length-1, LQProviders.length-1, msg.sender, tokenAddress, amount));
-                }
             }
+            if(!added) {
+                    LPBalances[msg.sender].push(LQProvision(LPBalances[msg.sender].length, LPBalances[msg.sender][0].LPidx, msg.sender, tokenAddress, amount));
+                }
         }
     }
 
@@ -68,11 +68,11 @@ contract LooneySwap {
                 if(LPBalances[msg.sender][i].amount < amount) {
                     revert();
                 }
-                LPBalances[msg.sender][i].amount.sub(amount);
+                LPBalances[msg.sender][i].amount = SafeMath.sub(LPBalances[msg.sender][i].amount, amount);
                 if(LPBalances[msg.sender][i].amount == 0) {
                     deleteLQProvision(msg.sender, tokenAddress);
                 }
-                IERC20(LPBalances[msg.sender][i].token).transfer(msg.sender, amount);
+                IERC20(tokenAddress).transfer(msg.sender, amount);
             }
         }
         if(!found) revert();
@@ -100,16 +100,15 @@ contract LooneySwap {
 
     //call this function when a user withdraws liquidity for a given token
     function deleteLQProvision(address LPAddress, address tokenAddress) private returns(bool success) {
-        require(isLP(LPAddress));
-        require(LPBalances[LPAddress].length > 0);
+        require(isLP(LPAddress), "This address is not a liqiudity provider");
+        require(LPBalances[LPAddress].length > 0, "No liquidity balances for this address");
         if(LPBalances[LPAddress].length == 1) {
             if(LPBalances[LPAddress][0].token == tokenAddress) {
                 deleteLQProvider(LPAddress);
                 LPBalances[LPAddress].pop();
-                delete LPBalances[LPAddress];
                 return true;
             } else {
-                revert();
+                revert("This address does not hold this token");
             }
         }
         uint toDelete = 0;
@@ -120,21 +119,25 @@ contract LooneySwap {
                 found = true;
             }
         }
-        if(!found) revert();
+        if(!found) revert("This address does not hold this token");
         LQProvision memory toMove = LPBalances[LPAddress][LPBalances[LPAddress].length-1];
+        toMove.idx = toDelete;
         LPBalances[LPAddress][toDelete] = toMove;
+        LPBalances[LPAddress].pop();
         return true;
     }
 
     //this function should only be called by deleteLQProvision. if the last LQProvision is withdrawn
     //for a given LQProvider then deleteLQProvider will be called.
     function deleteLQProvider(address LPAddress) private returns(bool success) {
-        require(isLP(LPAddress));
+        require(isLP(LPAddress), "This address is not a liqiudity provider");
         uint toDelete = LPBalances[LPAddress][0].LPidx;
         address toMove = LQProviders[LQProviders.length-1];
-        LQProviders[toDelete] = toMove;
-        for (uint i = 0; i < LPBalances[toMove].length; i++) {
-            LPBalances[toMove][i].LPidx = toDelete;
+        if(LPAddress != toMove) {
+            LQProviders[toDelete] = toMove;
+            for (uint i = 0; i < LPBalances[toMove].length; i++) {
+                LPBalances[toMove][i].LPidx = toDelete;
+            }
         }
         LQProviders.pop();
         return true;
