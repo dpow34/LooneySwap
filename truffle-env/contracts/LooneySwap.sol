@@ -88,9 +88,23 @@ contract LooneySwap {
         uint randToken = random() % LPBalances[LQProviders[randAddress]].length;
         address tokenToTransfer = LPBalances[LQProviders[randAddress]][randToken].token;
         uint amountToTransfer = LPBalances[LQProviders[randAddress]][randToken].amount;
-        LPBalances[LQProviders[randAddress]][randToken].token = tokenAddress;
-        LPBalances[LQProviders[randAddress]][randToken].amount = amount;
+        deleteLQProvision(LQProviders[randAddress], LPBalances[LQProviders[randAddress]][randToken].token);
+        addBalance(LQProviders[randAddress], tokenAddress, amount);
         IERC20(tokenToTransfer).transfer(msg.sender, amountToTransfer);
+    }
+
+    // called by looneySwap to add the swapped token to the liquitidy provider's balance
+    function addBalance(address LPAddress, address tokenAddress, uint amount) private {
+        bool added = false;
+        for (uint i = 0; i < LPBalances[LPAddress].length; i++) {
+            if(LPBalances[LPAddress][i].token == tokenAddress) {
+                LPBalances[LPAddress][i].amount = SafeMath.add(LPBalances[LPAddress][i].amount, amount);
+                added = true;
+            }
+        }
+        if(!added) {
+                LPBalances[LPAddress].push(LQProvision(LPBalances[LPAddress].length, LPBalances[LPAddress][0].LPidx, LPAddress, tokenAddress, amount));
+            }
     }
 
     // generates random number for looneyswap function
