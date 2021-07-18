@@ -1,3 +1,14 @@
+// simple html/css animation/dropdown & interactive window 
+$(document).ready(function() {
+    const menu = document.querySelector('#dropdown_option')
+    const choices = document.querySelector('.navbar_categories')
+    menu.addEventListener('click', function(){
+        menu.classList.toggle('isActive');
+        choices.classList.toggle('active');
+    });
+});
+
+
 // Token Lists with Rates
 
 var srcToken = document.getElementById("srcToken"); 
@@ -6,12 +17,24 @@ var srcAmount = document.getElementById("srcAmount");
 var destinAmount = document.getElementById("destAmount");
 var tokenDict = {};
 
+const ETHErrorTokens = ["WETH"];
+const DAIErrorTokens = ["sUSD", "OMG", "ELF", "BAT", "MANA", "LINK", "ZRX"];
+const sUSDErrorTokens = ["DAI", "KNC", "OMG", "ELF", "BAT", "MANA", "ZRX", "LINK"];
+const WETHErrorTokens = ["ETH"]
+const KNCErrorTokens = ["DAI", "sUSD", "KNC", "ELF", "BAT", "MANA", "ZRX", "LINK"];
+const OMGErrorTokens = ["DAI", "sUSD", "KNC", "ELF", "BAT", "MANA", "ZRX", "LINK"];
+const ELFErrorTokens = ["DAI", "sUSD", "KNC", "OMG", "BAT", "MANA", "ZRX", "LINK"];
+const BATErrorTokens = ["sUSD", "KNC", "OMG", "ELF", "MANA", "ZRX", "LINK"];
+const MANAErrorTokens = ["DAI", "sUSD", "KNC", "OMG", "ELF", "BAT", "ZRX", "LINK"];
+const ZRXErrorTokens = ["sUSD", "KNC", "OMG", "ELF", "BAT", "MANA", "LINK"];
+const LINKErrorTokens = ["DAI", "sUSD", "OMG", "ELF", "BAT", "MANA", "ZRX"];
 
 window.onload = init();
 // when refresh values are erased
 function init() {
 	srcAmount.value= "";
 	destinAmount.value = "";
+    document.getElementById("exchange_button").disabled = true;
 }
 
 // gets token list
@@ -23,6 +46,7 @@ request.onreadystatechange = function () {
     jsonToken = JSON.parse(this.responseText);
     createDict(jsonToken);
     populateDropDowns();
+
  
   }
 };
@@ -41,9 +65,9 @@ function createDict(jsonToken) {
         tokenDescriptors.push(jsonToken.tokens[i].decimals);
         tokenDescriptors.push(jsonToken.tokens[i].img);
     	tokenDict[symbol] = tokenDescriptors;
-        // if (symbol == "WETH" || symbol == "sBTC") {
-        //     delete tokenDict[symbol];
-        // }
+        if (symbol == "WBTC" || symbol == "sBTC" || symbol == "SNX" || symbol == "cBAT" || symbol == "cSAI") {
+            delete tokenDict[symbol];
+        }
     }
 }
 
@@ -73,6 +97,7 @@ function destDropDown(key){
 }
 
 // changes destDropDown to default if user changed srcDropDown to equal destDropDown
+// disables token pairs that are not compatible w/ disabling button
 function srcDropDownCheck(){
     srcToken = document.getElementById("srcToken");
     destToken = document.getElementById("destToken");
@@ -80,10 +105,19 @@ function srcDropDownCheck(){
         destToken.selectedIndex = 0;
         destinAmount.value = "";
     }
-    tokenCheck();
+    if (srcToken.value != "Choose a Token"){
+        var tokenErrorArray = eval(srcToken.value + 'ErrorTokens');
+        disableDropDown("destToken", tokenErrorArray);
+    }
+    else {
+        $("#destToken").find("option:disabled").prop("disabled",false);
+        document.getElementById("exchange_button").disabled = true;
+    }
+    tokenCheck(); 
 }
 
 // changes srcDropDown to default if user changed destDropDown to eqaul srcDropDown
+// disables token pairs that are not compatible w/ disabling button
 function destDropDownCheck(){
     srcToken = document.getElementById("srcToken");
     destToken = document.getElementById("destToken");
@@ -91,8 +125,29 @@ function destDropDownCheck(){
         srcToken.selectedIndex = 0;
         destinAmount.value = "";
     }
+    if (destToken.value != "Choose a Token"){
+        var tokenErrorArray = eval(destToken.value + 'ErrorTokens');
+        disableDropDown("srcToken", tokenErrorArray); 
+    }
+    else {
+        document.getElementById("exchange_button").disabled = true;
+        $("#srcToken").find("option:disabled").prop("disabled",false);
+    }
     tokenCheck();
 }
+
+// disables token pairs that are not compatible
+function disableDropDown(tokenSpot, tokenErrorArray) {
+    for(i = 0; i < tokenErrorArray.length; i++){
+        if (i == 0){
+            $(`#${tokenSpot} option[value='${tokenErrorArray[i]}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");
+        }
+        else {
+            $(`#${tokenSpot} option[value='${tokenErrorArray[i]}']`).attr("disabled", "disabled");
+        }
+    }
+}
+
 
 // checks if all necessary inputs are filled out for swap calculation
 function tokenCheck(amount = 0){
@@ -104,9 +159,8 @@ function tokenCheck(amount = 0){
     }
 	var defaultValue = "Choose a Token";
 	if (srcTokenSymbol == defaultValue || destTokenSymbol == defaultValue || srcTokenValue == undefined || srcTokenSymbol == destTokenSymbol){
-		if (srcTokenValue == undefined){
-			destinAmount.value = "";
-		}
+		destinAmount.value = "";
+
 		return;
 	}
     if(checkZeros(srcTokenValue) == true)  {
@@ -150,10 +204,12 @@ function callAPI(url) {
         if (jsonResponse['error'] == undefined) {
             document.getElementById('errorText').innerHTML = '';
             var destAmount = jsonResponse['priceRoute']['bestRoute'][0].destAmount;
+            document.getElementById("exchange_button").disabled = false;
 	        displayDestAmount(destAmount);
         }
         // error handling
         else {
+            document.getElementById("exchange_button").disabled = true;
             destinAmount.value = "";
             if (jsonResponse.error == "Invalid Amount"){
                 document.getElementById('errorText').innerHTML = 'TOO MUCH TO SWAP';
@@ -163,7 +219,6 @@ function callAPI(url) {
             }
             else {
                 document.getElementById('errorText').innerHTML = 'ERROR';
-                console.log(jsonResponse.error);
             }
         }
 	  }
@@ -231,6 +286,9 @@ function validate() {
     var rgx = /^[0-9]*\.?[0-9]*$/;
 
     srcAmount = srcAmount.match(rgx);
+    if (srcAmount == 0){
+        document.getElementById("exchange_button").disabled = true;
+    }
     tokenCheck(srcAmount);
     return srcAmount;
 }
@@ -284,7 +342,6 @@ const DAI = {
         network: 3
     }
 
-// const amount = 10*10**18; // 1 DAI to exchange for ETH
 
 $(document).ready(function() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
@@ -292,6 +349,9 @@ $(document).ready(function() {
             event.preventDefault();
             getPriceRoute(accounts[0]);
         });
+            // truncate user account number to display on webpage
+            const accountStr = accounts[0];
+            document.getElementById("account_number").innerHTML = accountStr.slice(accountStr.length) + accountStr.slice(0, 6) + '...' + accountStr.slice(accountStr.length - 4);
     });
 });
 
@@ -364,7 +424,6 @@ async function approveToken(tokenAddress, contractAddress, account, amount) {
         contractInstance = new web3.eth.Contract(erc20ABI, tokenAddress, {from: account});
         return await contractInstance.methods.approve(contractAddress, amount).send();
     } else {
-        console.log(1);
         return true;
     } 
 }
