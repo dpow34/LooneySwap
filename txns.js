@@ -24,7 +24,7 @@ module.exports = function(){
             "destToken": destToken,
             "destTokenDecimals": destTokenDecimals,
             "destAmount": destAmount,
-            "timeStamp": new Date().toLocaleDateString('en-US', { timeZone: 'UTC' })
+            "timeStamp": new Date()
         }
         await datastore.save({ "key": key, "data": new_txn});
         return key;
@@ -33,7 +33,7 @@ module.exports = function(){
     /* ------------- Controller Functions ------------- */
 
     router.post('/', async function(req, res){
-        const key = datastore.key([USERS, req.params.address]);
+        const key = datastore.key([TXNS, req.params.address]);
         datastore.get(key, async (err, entity) => {
             if(!entity) {
                 if(req.body.txId &&
@@ -73,4 +73,4 @@ module.exports = function(){
     });
 
     return router;
-}
+}();
