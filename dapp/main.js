@@ -349,9 +349,9 @@ $(document).ready(function() {
             event.preventDefault();
             getPriceRoute(accounts[0]);
         });
-            // truncate user account number to display on webpage
-            const accountStr = accounts[0];
-            document.getElementById("account_number").innerHTML = accountStr.slice(accountStr.length) + accountStr.slice(0, 6) + '...' + accountStr.slice(accountStr.length - 4);
+        // truncate user account number to display on webpage
+        const accountStr = accounts[0];
+        document.getElementById("account_number").innerHTML = accountStr.slice(accountStr.length) + accountStr.slice(0, 6) + '...' + accountStr.slice(accountStr.length - 4);
     });
 });
 
