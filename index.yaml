@@ -1,0 +1,7 @@
+indexes:
+
+- kind: Txns
+  properties:
+  - name: owner
+  - name: timeStamp
+    direction: desc
