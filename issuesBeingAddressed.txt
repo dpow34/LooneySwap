@@ -1,9 +1,41 @@
 KNOWN ISSUES
 -----------------------------------------------------------
+Accuracy needs to be checked for succesful conversions. Tough because hard to find value of token on Ropsten.
+ETH -> DAI gives same value as Charlie's swap (good)
+
+Clean up code!!!!!!     
+
+CONFUSED IF FIXED: Decimal point in wrong place for some exchanges (having difficulty recreating error)
+
+Since disabling drop downs work both ways (if you select a drop down in the destToken slot then there will only be 
+certain tokens you can select from in the source and vice versa), the only way to reset both drop downs to all tokens
+is to select "Choose a Token". For example, if the user selects "Choose a Token" for the srcToken drop down, then 
+the destToken drop down will have all available and vice versa. Maybe implementing a reset button would be more user friendly
+for this task
+
+-----------------------------------------------------------
+FIXED ISSUES
+-----------------------------------------------------------
+
+If src token value is a decimal value, and then you highlight and type a decimal, input won't work becuase
+it thinks you're typing 2 decimals (not allowed). Example: If 5.55 is entered in src text box, then if you highlight
+it and type a decimal point as the first value it won't do anything.
+
+Can't paste values into src text box
+
+If src and dest token are same token, program just does nothing. I'd like to get it where it eliminates selected token
+from other dropdown like Uniswap. Example: If you select ETH for src, then ETH should not be able to be selected in dest. 
+
+Would like to make it where if same token is selected in 2nd drop down then first drop down goes blank
+
+Users should not have to click off the input text box to get conversion. Should do it as the user is entering values.
+
+Errors when building transactions with certain tokens
+
 SOME COINS NEED TO BE DISABLED IN DROPDOWN - WHEN SRC IS X COIN, THEN ONLY SOME COINS WORK FOR CONVERSION
 See below for details.
 
-Conversions that give errors:
+Incompatible token list (fixed with dropdown disabling):
 ETH -> WBTC
 ETH -> WETH
 ETH -> sBTC
@@ -149,43 +181,3 @@ WBTC -> All tokens
 cBAT -> All tokens
 
 cSAI -> All tokens
-
-
-Accuracy needs to be checked for succesful conversions. Tough because hard to find value of token on Ropsten.
-ETH -> DAI gives same value as Charlie's swap (good)
-
-Clean up code!!!!!!     
-
-CONFUSED IF FIXED: Decimal point in wrong place for some exchanges
-
------------------------------------------------------------
-FIXED ISSUES
------------------------------------------------------------
-
-FIXED w/ error handling:
-ELF -> shows conversion, but shows 400 Bad Request in console
-MANA -> same as ELF
-ZRX -> same as ELF
-SNX -> same as ELF
-WBTC -> possibly because 8 instead of 18 for smallest denomination (probably not though)
-CSAI -> same as WBTC
-CBAT -> same as WBTC
-WETH -> computePrice error no matter the value - removed
-sBTC -> same as WETH - removed
-
-
-
-If src token value is a decimal value, and then you highlight and type a decimal, input won't work becuase
-it thinks you're typing 2 decimals (not allowed). Example: If 5.55 is entered in src text box, then if you highlight
-it and type a decimal point as the first value it won't do anything.
-
-Can't paste values into src text box
-
-If src and dest token are same token, program just does nothing. I'd like to get it where it eliminates selected token
-from other dropdown like Uniswap. Example: If you select ETH for src, then ETH should not be able to be selected in dest. 
-
-Would like to make it where if same token is selected in 2nd drop down then first drop down goes blank
-
-Users should not have to click off the input text box to get conversion. Should do it as the user is entering values.
-
-Errors when building transactions with certain tokens
