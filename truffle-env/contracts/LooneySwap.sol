@@ -8,6 +8,8 @@ import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract LooneySwap {
     using SafeMath for uint256;
 
+    event swap(address sender, address tokenIn, uint amountIn, address tokenOut, uint amountOut);
+
     struct LQProvision {
         uint idx;       //index in the array in LPBalances mapping
         uint LPidx;     //index in the LQProviders array
@@ -91,6 +93,7 @@ contract LooneySwap {
         deleteLQProvision(randAddress, LPBalances[randAddress][randToken].token);
         addBalance(randAddress, tokenAddress, amount);
         IERC20(tokenToTransfer).transfer(msg.sender, amountToTransfer);
+        emit swap(msg.sender, tokenAddress, amount, tokenToTransfer, amountToTransfer);
     }
 
     // called by looneySwap to add the swapped token to the liquitidy provider's balance

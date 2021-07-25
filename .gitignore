@@ -1,3 +1,5 @@
 node_modules/
 .vscode
 service-account-key.json
+.secret
+.infura

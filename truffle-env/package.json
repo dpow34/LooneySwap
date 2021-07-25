@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/powdrild/LooneySwap#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.2.0"
+    "@openzeppelin/contracts": "^4.2.0",
+    "truffle-hdwallet-provider": "^1.0.17"
   }
 }
