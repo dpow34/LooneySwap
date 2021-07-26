@@ -229,6 +229,10 @@ fa-coins{
   color: hsl(0, 0%, 100%);
 }
 
+.liquidity_table {
+  background: #0e0e0e;
+}
+
 .left {
   float:left;
   /*border: 4px solid red;*/
@@ -251,7 +255,6 @@ fa-coins{
   /*border: 1px solid red;*/
   color: hsl(0, 0%, 100%);
 }
-
 
 /*Footer Style*/
 

@@ -63,7 +63,23 @@
           <button id="addLiquidity_button" class="btn btn-primary">Add Liquidity</button>
           <br>
           <span id="errorText"></span>
-        </div>
+          <div class="row justify-content-center">
+            <div class="col-auto" id="lqTable">
+              <caption><h3>Liquidity Provisions</h3></caption>
+              <table class="table table-responsive table-dark liquidity_table">
+                <thead>
+                  <th scope="col">#</th>
+                  <th scope="col">Symbol</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Withdraw</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </thead>
+                <tbody id="lqBody">
+                </tbody>
+              </table>
+            </div>
+          </div>
       </div>
     </form>
 
