@@ -59,12 +59,14 @@ function formatInputListeners(element) {
 }
 
 function looneySwap(account, tokenAddress, amount) {
-    getDecimals(tokenAddress, account).then((decimals) => {
+    getTokenDecimals(tokenAddress, account).then((decimals) => {
         amount = BigInt(amount*10**decimals);
         contractInstance.methods.getLQProviders().call().then((LQProviders) => {
             if(LQProviders.length > 0) {
                 approveToken(tokenAddress, contractAddress, account, amount).on('receipt', function(receipt) {
-                    contractInstance.methods.looneySwap(tokenAddress, amount).send();
+                    contractInstance.methods.looneySwap(tokenAddress, amount).send().on('receipt', function(receipt) {
+                        getLQBalances(account);
+                    });
                 }).on('error', function(error, receipt) {
                     document.getElementById('errorText').innerHTML = 'TOKEN TRANSFER NOT APPROVED';
                 });
