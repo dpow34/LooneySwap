@@ -222,6 +222,16 @@ fa-coins{
   /*border: 1px solid red;*/
 } 
 
+.looneySwap_container {
+  background-color: #0e0e0e;
+  display: block;
+  text-align: center;
+  color: hsl(0, 0%, 100%);
+}
+
+.liquidity_table {
+  background: #0e0e0e;
+}
 
 .left {
   float:left;
@@ -245,7 +255,6 @@ fa-coins{
   /*border: 1px solid red;*/
   color: hsl(0, 0%, 100%);
 }
-
 
 /*Footer Style*/
 
