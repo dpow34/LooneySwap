@@ -192,7 +192,7 @@ function validateTableInput(id, buttonId) {
     let amount = document.getElementById(id.toString()).value;
     let rgx = /^[0-9]*\.?[0-9]*$/;
     amount = amount.match(rgx);
-    if (amount == 0 || amount > document.getElementById(id.toString() + "_max").innerHTML) {
+    if (amount == 0 || amount > parseFloat(document.getElementById(id.toString() + "_max").innerHTML)) {
         document.getElementById(buttonId).disabled = true;
     } else {
         document.getElementById(buttonId).disabled = false;
