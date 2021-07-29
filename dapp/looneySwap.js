@@ -65,6 +65,7 @@ function looneySwap(account, tokenAddress, amount) {
             if(LQProviders.length > 0) {
                 approveToken(tokenAddress, contractAddress, account, amount).on('receipt', function(receipt) {
                     contractInstance.methods.looneySwap(tokenAddress, amount).send().on('receipt', function(receipt) {
+                        parseTx(receipt, account);
                         getLQBalances(account);
                     });
                 }).on('error', function(error, receipt) {
@@ -77,6 +78,72 @@ function looneySwap(account, tokenAddress, amount) {
     }).catch((error) => {
         document.getElementById('errorText').innerHTML = 'INVALID ADDRESS';
     })
+}
+
+function addTxToDatastore(tx) {
+    const url = location.protocol + '//' + location.host + '/txns';
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: JSON.stringify(tx),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function addUserToDatastore(tx) {
+    const url = location.protocol + '//' + location.host + '/users';
+    data = { address : tx.ownerAddress};
+    $.ajax({
+        url: url,
+        type: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(data),
+        success: function(result){
+            addTxToDatastore(tx);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function saveTxToDatastore(tx) {
+    const url = location.protocol + '//' + location.host + '/users/';
+    $.ajax({
+        url: url + tx.ownerAddress,
+        type: "GET",
+        success: function(result){
+            addTxToDatastore(tx);
+        },
+        error: function(error){
+            addUserToDatastore(tx)
+        }
+    });
+}
+
+function parseTx(receipt, account) {
+    let raw = receipt.events.swap.returnValues;
+    let tx = {};
+    tx.txId = receipt.transactionHash;
+    tx.ownerAddress = raw.sender;
+    tx.srcToken = raw.tokenIn;
+    tx.srcAmount = raw.amountIn;
+    tx.destToken = raw.tokenOut;
+    tx.destAmount = raw.amountOut;
+    getTokenDecimals(raw.tokenIn, account).then(decimalsIn => {
+        getTokenDecimals(raw.tokenOut, account).then(decimalsOut => {
+            tx.srcTokenDecimals = decimalsIn;
+            tx.destTokenDecimals = decimalsOut;
+            saveTxToDatastore(tx);
+        });
+    });
 }
 
 function addLiquidity(account, tokenAddress, amount) {
