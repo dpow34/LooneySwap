@@ -61,6 +61,7 @@ function formatInputListeners(element) {
 function looneySwap(account, tokenAddress, amount) {
     getTokenDecimals(tokenAddress, account).then((decimals) => {
         let safe_amount = new BigNumber(amount.toString() + `e+${decimals}`);
+        safe_amount = safe_amount.toString();
         contractInstance.methods.getLQProviders().call().then((LQProviders) => {
             if(LQProviders.length > 0) {
                 approveToken(tokenAddress, contractAddress, account, safe_amount.toString()).on('receipt', function(receipt) {
