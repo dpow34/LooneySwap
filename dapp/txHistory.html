@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>LooneySwap</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script> 
+      <script type="text/javascript" src="./web3.min.js"></script>
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" 
         integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" 
         crossorigin="anonymous">
@@ -14,14 +18,7 @@
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
         crossorigin="anonymous">
       <link rel="stylesheet" href="styles.css">
-      <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous"></script> 
-      <script type="text/javascript" src="./web3.min.js"></script>
-      <script type="text/javascript" src="./looneySwap-abi.js"></script>
-      <script type="text/javascript" src="./erc20-abi.js"></script>
-      <script type="text/javascript" src="./bignumber.js"></script>
-      <script type="text/javascript" src="./looneySwap.js"></script>
+      <script type="text/javascript" src="./txHistory.js"></script>
   </head>
 
   <body>
@@ -53,30 +50,19 @@
     <!--Swap section-->
     <form>
       <div class="looneySwap_container">
-        <div>
-          <label for="srcToken">Token :</label>
-          <input type="text" name="srcToken" id="srcToken" oninput="validateInput()">
-          <br>
-          <label for="srcAmount">Amount :</label>
-          <input type="number" name="srcAmount" id="srcAmount" oninput="validateInput()">
-          <br>
-          <button id="looneySwap_button" class="btn btn-primary">LooneySwap</button>
-          <button id="addLiquidity_button" class="btn btn-primary">Add Liquidity</button>
-          <br>
-          <span id="errorText"></span>
           <div class="row justify-content-center">
-            <div class="col-auto" id="lqTable">
-              <caption><h3>Liquidity Provisions</h3></caption>
+            <div class="col-auto" id="txTable">
+              <caption><h3>Historical Transactions</h3></caption>
               <table class="table table-responsive table-dark liquidity_table">
                 <thead>
-                  <th scope="col">#</th>
-                  <th scope="col">Symbol</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Withdraw</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
+                  <th scope="col">TX Hash</th>
+                  <th scope="col">Time</th>
+                  <th scope="col">Token In</th>
+                  <th scope="col">Amount In</th>
+                  <th scope="col">Token Out</th>
+                  <th scope="col">Amount Out</th>
                 </thead>
-                <tbody id="lqBody">
+                <tbody id="txBody">
                 </tbody>
               </table>
             </div>

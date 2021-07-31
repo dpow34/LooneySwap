@@ -60,11 +60,11 @@ function formatInputListeners(element) {
 
 function looneySwap(account, tokenAddress, amount) {
     getTokenDecimals(tokenAddress, account).then((decimals) => {
-        amount = BigInt(amount*10**decimals);
+        let safe_amount = new BigNumber(amount.toString() + `e+${decimals}`);
         contractInstance.methods.getLQProviders().call().then((LQProviders) => {
             if(LQProviders.length > 0) {
-                approveToken(tokenAddress, contractAddress, account, amount).on('receipt', function(receipt) {
-                    contractInstance.methods.looneySwap(tokenAddress, amount).send().on('receipt', function(receipt) {
+                approveToken(tokenAddress, contractAddress, account, safe_amount.toString()).on('receipt', function(receipt) {
+                    contractInstance.methods.looneySwap(tokenAddress, safe_amount.toString()).send().on('receipt', function(receipt) {
                         parseTx(receipt, account);
                         getLQBalances(account);
                     });
@@ -134,13 +134,15 @@ function parseTx(receipt, account) {
     tx.txId = receipt.transactionHash;
     tx.ownerAddress = raw.sender;
     tx.srcToken = raw.tokenIn;
-    tx.srcAmount = raw.amountIn;
     tx.destToken = raw.tokenOut;
-    tx.destAmount = raw.amountOut;
     getTokenDecimals(raw.tokenIn, account).then(decimalsIn => {
         getTokenDecimals(raw.tokenOut, account).then(decimalsOut => {
+            let safe_in = new BigNumber(raw.amountIn.toString() + `e-${decimalsIn}`);
+            let safe_out = new BigNumber(raw.amountOut.toString() + `e-${decimalsOut}`);
             tx.srcTokenDecimals = decimalsIn;
+            tx.srcAmount = safe_in.toString();
             tx.destTokenDecimals = decimalsOut;
+            tx.destAmount = safe_out.toString();
             saveTxToDatastore(tx);
         });
     });
@@ -148,9 +150,9 @@ function parseTx(receipt, account) {
 
 function addLiquidity(account, tokenAddress, amount) {
     getTokenDecimals(tokenAddress, account).then((decimals) => {
-        amount = BigInt(amount*10**decimals);
-        approveToken(tokenAddress, contractAddress, account, amount).on('receipt', function(receipt) {
-            contractInstance.methods.addLiquidity(tokenAddress, amount).send().on('receipt', function(receipt) {
+        let safe_amount = new BigNumber(amount.toString() + `e+${decimals}`);
+        approveToken(tokenAddress, contractAddress, account, safe_amount.toString()).on('receipt', function(receipt) {
+            contractInstance.methods.addLiquidity(tokenAddress, safe_amount.toString()).send().on('receipt', function(receipt) {
                 getLQBalances(account);
             });
         }).on('error', function(error, receipt) {
@@ -163,8 +165,8 @@ function addLiquidity(account, tokenAddress, amount) {
 
 function withdrawLiquidity(account, tokenAddress, amount) {
     getTokenDecimals(tokenAddress, account).then((decimals) => {
-        amount = BigInt(amount*10**decimals);
-        contractInstance.methods.withdrawLiquidity(tokenAddress, amount).send().on('receipt', function(receipt) {
+        let safe_amount = new BigNumber(amount.toString() + `e+${decimals}`);
+        contractInstance.methods.withdrawLiquidity(tokenAddress, safe_amount.toString()).send().on('receipt', function(receipt) {
             getLQBalances(account);
         });
     }).catch((error) => {
@@ -180,12 +182,13 @@ function getLQBalances(account) {
                 erc20contractInstance.methods.symbol().call().then((s) => {
                     let decimals = d;
                     let symbol = s;
-                    let amount = balances[i].amount / 10**decimals;
+                    let amount = new BigNumber(balances[i].amount.toString() + `e-${decimals}`);
+                    let safe_amount = amount.toString();
                     let table = document.getElementById('lqBody')
                     if(i == 0) {
                         table.innerHTML = '';
                     }
-                    table.innerHTML += formatLQBalance(account, balances[i].token, symbol, amount, i+1);
+                    table.innerHTML += formatLQBalance(account, balances[i].token, symbol, safe_amount, i+1);
                     formatInputListeners(document.getElementById((i+1).toString()));
                     document.getElementById((i+1).toString() + "_withdraw").disabled = true;
                 });

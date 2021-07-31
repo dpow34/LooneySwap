@@ -17,13 +17,13 @@ module.exports = function(){
     const post_txn = async function (txId, ownerAddress, srcToken, srcTokenDecimals, srcAmount, destToken, destTokenDecimals, destAmount){
         const key = datastore.key([TXNS, txId]);
         const new_txn = {
-            "owner": ownerAddress,
+            "owner": ownerAddress.toLowerCase(),
             "srcToken": srcToken,
             "srcTokenDecimals": srcTokenDecimals,
-            "srcAmount": srcAmount,
+            "srcAmount": srcAmount.toString(),
             "destToken": destToken,
             "destTokenDecimals": destTokenDecimals,
-            "destAmount": destAmount,
+            "destAmount": destAmount.toString(),
             "timeStamp": new Date()
         }
         await datastore.save({ "key": key, "data": new_txn});
@@ -47,7 +47,7 @@ module.exports = function(){
                 ) {
                     const key = await post_txn(
                         req.body.txId,
-                        req.body.ownerAddress, 
+                        req.body.ownerAddress.toLowerCase(), 
                         req.body.srcToken,
                         req.body.srcTokenDecimals,
                         req.body.srcAmount,
