@@ -43,30 +43,39 @@
     <!--Header Section-->
     <div class="header">
       <h1>LooneySwap</h1>
-      <h2>Swap ERC-20 coins</h2>
+      <h2>Swap ERC-20 Tokens</h2>
     </div>
 
     <!--Swap section-->
     <form>
       <div class="swap_container">
         <div class="left" >
-            <label for="srcToken">Source token:</label>
+            <label for="srcToken">Send:</label>
             <select name="srcToken" id="srcToken" class="tokenSelect" onchange="srcDropDownCheck()">
               <option>Choose a Token</option>
             </select>
             <input type="number" name="srcAmount" id="srcAmount" oninput="validate()">
-            <span id="errorText"></span>
+            <!-- <span id="errorText"></span> -->
         </div>
-        <div class="center" >
-          <button id="exchange_button" class="btn btn-primary">Swap Tokens</button>
-        </div>  
         <div class="right" >
-            <label for="destToken">Destination Token:</label>
+            <label for="destToken">Receive:</label>
             <select name="destToken" id="destToken" class="tokenSelect" onchange="destDropDownCheck()">
               <option>Choose a Token</option>
             </select>
             <input type="text" name="destAmount" id="destAmount" readonly="readonly">
         </div>
+        <br>
+        <div class="center" >
+          <div class="rangeslider">
+              <input type="range" min="0" max="100" value="10"
+                  class="myslider" id="slippageRange">
+              <p>Slippage: <span id="slippage"></span></p>
+          </div>
+          <span id="errorText"></span>
+          <br>
+          <br>
+          <button id="exchange_button" class="btn btn-primary">Swap Tokens</button>
+        </div>  
       </div>
     </form>
 
