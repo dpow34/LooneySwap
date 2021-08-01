@@ -8,15 +8,13 @@ $(document).ready(function() {
     });
 });
 
-var rangeslider = document.getElementById("sliderRange");
-var output = document.getElementById("demo");
-output.innerHTML = rangeslider.value + "%";
-var slippage = 100 - rangeslider.value;
+var slippageSlider = document.getElementById("slippageRange");
+var output = document.getElementById("slippage");
+output.innerHTML = slippageSlider.value + "%";
   
-rangeslider.oninput = function() {
+slippageSlider.oninput = function() {
   output.innerHTML = this.value + "%";
 }
-
 
 // Token Lists with Rates
 
@@ -385,11 +383,16 @@ function getPriceRoute(account) {
     });
 } 
 
+function getSlippage() {
+    return (100 - slippageSlider.value)/100;
+}
+
 async function exchange(account, priceRoute) {
     const exchangeUrl = `https://apiv4.paraswap.io/v2/transactions/3`;
     
     //calculate minimum amount of DAI to recieve after 10% slippage
-    const destAmount = (priceRoute.destAmount*(slippage/100)).toFixed(0);
+    var slippage = getSlippage();
+    const destAmount = (priceRoute.destAmount*slippage).toFixed(0);
     
     const config = {
         priceRoute,
