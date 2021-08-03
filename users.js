@@ -32,7 +32,7 @@ module.exports = function(){
     const get_user_txns = async function (req){
         let q = datastore.createQuery(TXNS).filter('owner', req.params.address.toLowerCase()).order('timeStamp', {
             descending: true
-          }).limit(NUM_PER_PAGE);
+          });
         const results = {};
         if(Object.keys(req.query).includes("cursor")) {
             q = q.start(req.query.cursor);
