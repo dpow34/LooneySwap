@@ -402,14 +402,23 @@ async function approveToken(tokenAddress, contractAddress, account, amount) {
 }
 
 function parseTx(receipt, account, srcToken, destToken) {
-    let data = receipt.logs[receipt.logs.length-1].data;
     let parameters = [
         {type:"uint256", name:"amount0In"},
         {type:"uint256", name:"amount1In"},
         {type:"uint256", name:"amount0Out"},
         {type:"uint256", name:"amount1Out"}
     ];
-    const decodedSwap = web3.eth.abi.decodeParameters(parameters, data);
+    let decodedSwap;
+    for (let i = 0; i < receipt.logs.length; i++) {
+        try {
+            let temp = web3.eth.abi.decodeParameters(parameters, receipt.logs[i].data)
+            if(temp.amount0In) {
+                decodedSwap = temp;
+            }
+        } catch {
+            
+        }
+    }
     let tx = {};
     tx.txId = receipt.transactionHash;
     tx.ownerAddress = account;
@@ -435,7 +444,6 @@ function parseTx(receipt, account, srcToken, destToken) {
             tx.srcAmount = safe_in.toString();
             tx.destTokenDecimals = decimalsOut;
             tx.destAmount = safe_out.toString();
-            console.log(tx);
             saveTxToDatastore(tx);
         });
     });
