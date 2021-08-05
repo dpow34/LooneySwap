@@ -1,4 +1,4 @@
-// simple html/css animation/dropdown & interactive window 
+// html/css animation/dropdown & interactive window 
 $(document).ready(function() {
     const menu = document.querySelector('#dropdown_option')
     const choices = document.querySelector('.navbar_categories')
