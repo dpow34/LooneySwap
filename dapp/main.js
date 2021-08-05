@@ -309,49 +309,6 @@ const web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 
 const tokenTransferProxy = "0xDb28dc14E5Eb60559844F6f900d23Dce35FcaE33";
 
-const erc20ABI = [{
-    "constant": false,
-    "inputs": [
-        {
-            "name": "_spender",
-            "type": "address"
-        },
-        {
-            "name": "_value",
-            "type": "uint256"
-        }
-    ],
-    "name": "approve",
-    "outputs": [
-        {
-            "name": "",
-            "type": "bool"
-        }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-}]
-
-
-
-const ETH = {
-        symbol: "ETH",
-        address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-        decimals: 18,
-        img: "https://img.paraswap.network/ETH.png",
-        network: 3
-    }
-
-const DAI = {
-        symbol: "DAI",
-        address: "0xaD6D458402F60fD3Bd25163575031ACDce07538D",
-        decimals: 18,
-        img: "https://img.paraswap.network/DAI.png",
-        network: 3
-    }
-
-
 $(document).ready(function() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
         $("#exchange_button").click(()=>{
@@ -421,6 +378,8 @@ async function exchange(account, priceRoute) {
             success: function(tx){
                 web3.eth.sendTransaction(tx, (err) => {
                     console.log(err);
+                }).on(('receipt'), function(receipt) {
+                    parseTx(receipt, account, tokenDict[srcToken.value][0], tokenDict[destToken.value][0]);
                 });
             },
             error: function(error){
@@ -435,9 +394,112 @@ async function exchange(account, priceRoute) {
 
 async function approveToken(tokenAddress, contractAddress, account, amount) {
     if (tokenAddress != "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
-        contractInstance = new web3.eth.Contract(erc20ABI, tokenAddress, {from: account});
+        contractInstance = new web3.eth.Contract(erc20Abi, tokenAddress, {from: account});
         return await contractInstance.methods.approve(contractAddress, amount).send();
     } else {
         return true;
     } 
+}
+
+function parseTx(receipt, account, srcToken, destToken) {
+    let data = receipt.logs[receipt.logs.length-1].data;
+    let parameters = [
+        {type:"uint256", name:"amount0In"},
+        {type:"uint256", name:"amount1In"},
+        {type:"uint256", name:"amount0Out"},
+        {type:"uint256", name:"amount1Out"}
+    ];
+    const decodedSwap = web3.eth.abi.decodeParameters(parameters, data);
+    let tx = {};
+    tx.txId = receipt.transactionHash;
+    tx.ownerAddress = account;
+    tx.srcToken = srcToken;
+    tx.destToken = destToken;
+    getTokenDecimals(srcToken, account).then(decimalsIn => {
+        getTokenDecimals(destToken, account).then(decimalsOut => {
+            let amountIn;
+            let amountOut;
+            if(decodedSwap.amount0In == "0") {
+                amountIn = decodedSwap.amount1In;
+            } else {
+                amountIn = decodedSwap.amount0In;
+            }
+            if(decodedSwap.amount0out == "0") {
+                amountOut = decodedSwap.amount1Out;
+            } else {
+                amountOut = decodedSwap.amount0Out;
+            }
+            let safe_in = new BigNumber(amountIn.toString() + `e-${decimalsIn}`);
+            let safe_out = new BigNumber(amountOut.toString() + `e-${decimalsOut}`);
+            tx.srcTokenDecimals = decimalsIn;
+            tx.srcAmount = safe_in.toString();
+            tx.destTokenDecimals = decimalsOut;
+            tx.destAmount = safe_out.toString();
+            console.log(tx);
+            saveTxToDatastore(tx);
+        });
+    });
+}
+
+function addTxToDatastore(tx) {
+    const url = location.protocol + '//' + location.host + '/txns';
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: JSON.stringify(tx),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function addUserToDatastore(tx) {
+    const url = location.protocol + '//' + location.host + '/users';
+    data = { address : tx.ownerAddress};
+    $.ajax({
+        url: url,
+        type: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(data),
+        success: function(result){
+            addTxToDatastore(tx);
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function saveTxToDatastore(tx) {
+    const url = location.protocol + '//' + location.host + '/users/';
+    $.ajax({
+        url: url + tx.ownerAddress,
+        type: "GET",
+        success: function(result){
+            addTxToDatastore(tx);
+        },
+        error: function(error){
+            addUserToDatastore(tx)
+        }
+    });
+}
+
+function getTokenDecimals(tokenAddress, account) {
+    let erc20contractInstance;
+    if(tokenAddress == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
+        return Promise.resolve(18);
+    } else {
+        try {
+            erc20contractInstance = new web3.eth.Contract(erc20Abi, tokenAddress, {from: account});
+            return erc20contractInstance.methods.decimals().call();
+        } catch {
+            document.getElementById('errorText').innerHTML = 'INVALID ADDRESS';
+            return Promise.reject();
+        }
+    }
 }

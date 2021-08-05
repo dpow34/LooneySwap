@@ -46,10 +46,14 @@ function formatTxRow(time, tokenIn, amountIn, tokenOut, amountOut) {
 
 function getTokenSymbol(tokenAddress, account) {
     let erc20contractInstance;
-    try {
-        erc20contractInstance = new web3.eth.Contract(erc20Abi, tokenAddress, {from: account});
-        return erc20contractInstance.methods.symbol().call();
-    } catch {
-        return Promise.reject();
+    if(tokenAddress.toLowerCase() == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toLowerCase()) {
+        return Promise.resolve('ETH');
+    } else {
+        try {
+            erc20contractInstance = new web3.eth.Contract(erc20Abi, tokenAddress, {from: account});
+            return erc20contractInstance.methods.symbol().call();
+        } catch {
+            return Promise.reject();
+        }
     }
 }
