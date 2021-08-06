@@ -1,4 +1,4 @@
-// simple html/css animation/dropdown & interactive window 
+// html/css animation/dropdown & interactive window 
 $(document).ready(function() {
     const menu = document.querySelector('#dropdown_option')
     const choices = document.querySelector('.navbar_categories')
@@ -317,7 +317,11 @@ $(document).ready(function() {
         });
         // truncate user account number to display on webpage
         const accountStr = accounts[0];
-        document.getElementById("account_number").innerHTML = accountStr.slice(accountStr.length) + accountStr.slice(0, 6) + '...' + accountStr.slice(accountStr.length - 4);
+        document.getElementById("account_number").innerHTML = accountStr.slice(0, 6) + '...' + accountStr.slice(accountStr.length - 4);
+        // truncate user balance to display on webpage
+        web3.eth.getBalance(accountStr).then(value => {
+            document.getElementById("amount_data").innerHTML = String(value / Math.pow(10, 18)).slice(0, 4) + ' ETH';
+        });
     });
 });
 
