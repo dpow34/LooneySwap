@@ -2,16 +2,6 @@ const web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 const contractAddress = '0x7c55f55Ed5A9C0e56F00b4BCDeA3579e90EB3175';
 let contractInstance;
 
-// html/css animation/dropdown & interactive window 
-$(document).ready(function() {
-    const menu = document.querySelector('#dropdown_option')
-    const choices = document.querySelector('.navbar_categories')
-    menu.addEventListener('click', function(){
-        menu.classList.toggle('isActive');
-        choices.classList.toggle('active');
-    });
-});
-
 $(document).ready(function() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
         contractInstance = new web3.eth.Contract(looneySwapAbi, contractAddress, {from: accounts[0]});
@@ -41,6 +31,15 @@ $(document).ready(function() {
         });
 
         getLQBalances(accounts[0]);
+    });
+    
+    // html/css animation/dropdown & interactive window 
+    const menu = document.querySelector('#dropdown_option')
+    const choices = document.querySelector('.navbar_categories')
+    
+    menu.addEventListener('click', function(){
+        menu.classList.toggle('isActive');
+        choices.classList.toggle('active');
     });
 
     formatInputListeners(document.getElementById("srcAmount"));

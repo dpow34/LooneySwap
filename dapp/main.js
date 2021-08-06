@@ -428,19 +428,24 @@ function parseTx(receipt, account, srcToken, destToken) {
     tx.ownerAddress = account;
     tx.srcToken = srcToken;
     tx.destToken = destToken;
+    console.log(decodedSwap);
     getTokenDecimals(srcToken, account).then(decimalsIn => {
         getTokenDecimals(destToken, account).then(decimalsOut => {
             let amountIn;
             let amountOut;
-            if(decodedSwap.amount0In == "0") {
+            if(!decodedSwap.amount0In) {
                 amountIn = decodedSwap.amount1In;
+                console.log("here 1", decodedSwap.amount1In)
             } else {
                 amountIn = decodedSwap.amount0In;
+                console.log("here 2", decodedSwap.amount0In)
             }
-            if(decodedSwap.amount0out == "0") {
+            if(!decodedSwap.amount0out) {
                 amountOut = decodedSwap.amount1Out;
+                console.log("here 3", decodedSwap.amount1Out)
             } else {
                 amountOut = decodedSwap.amount0Out;
+                console.log("here 4"), decodedSwap.amount0Out
             }
             let safe_in = new BigNumber(amountIn.toString() + `e-${decimalsIn}`);
             let safe_out = new BigNumber(amountOut.toString() + `e-${decimalsOut}`);
