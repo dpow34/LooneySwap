@@ -220,25 +220,6 @@ function getLQBalances(account) {
     });
 }
 
-// for (let i = 0; i < balances.length; i++) {
-        //     let erc20contractInstance = new web3.eth.Contract(erc20Abi, balances[i].token, {from: account});
-        //     erc20contractInstance.methods.decimals().call().then((d) => {
-        //         erc20contractInstance.methods.symbol().call().then((s) => {
-        //             let decimals = d;
-        //             let symbol = s;
-        //             let amount = new BigNumber(balances[i].amount.toString() + `e-${decimals}`);
-        //             let safe_amount = amount.toString();
-        //             let table = document.getElementById('lqBody')
-        //             if(i == 0) {
-        //                 table.innerHTML = '';
-        //             }
-        //             table.innerHTML += formatLQBalance(account, balances[i].token, symbol, safe_amount, i+1);
-        //             formatInputListeners(document.getElementById((i+1).toString()));
-        //             document.getElementById((i+1).toString() + "_withdraw").disabled = true;
-        //         });
-        //     });
-        // }
-
 function formatLQBalance(account, tokenAddress, symbol, amount, index) {
     let buttonId = index.toString() + "_withdraw";
     let amountId = index.toString() + "_max";
