@@ -2,16 +2,6 @@ const web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 const contractAddress = '0x7c55f55Ed5A9C0e56F00b4BCDeA3579e90EB3175';
 let contractInstance;
 
-// html/css animation/dropdown & interactive window 
-$(document).ready(function() {
-    const menu = document.querySelector('#dropdown_option')
-    const choices = document.querySelector('.navbar_categories')
-    menu.addEventListener('click', function(){
-        menu.classList.toggle('isActive');
-        choices.classList.toggle('active');
-    });
-});
-
 $(document).ready(function() {
     window.ethereum.request({ method: 'eth_requestAccounts' }).then(async function(accounts) {
         contractInstance = new web3.eth.Contract(looneySwapAbi, contractAddress, {from: accounts[0]});
@@ -41,6 +31,15 @@ $(document).ready(function() {
         });
 
         getLQBalances(accounts[0]);
+    });
+    
+    // html/css animation/dropdown & interactive window 
+    const menu = document.querySelector('#dropdown_option')
+    const choices = document.querySelector('.navbar_categories')
+    
+    menu.addEventListener('click', function(){
+        menu.classList.toggle('isActive');
+        choices.classList.toggle('active');
     });
 
     formatInputListeners(document.getElementById("srcAmount"));
@@ -192,24 +191,27 @@ function withdrawLiquidity(account, tokenAddress, amount) {
 
 function getLQBalances(account) {
     contractInstance.methods.getLQBalances(account).call().then((balances) => {
-        for (let i = 0; i < balances.length; i++) {
-            let erc20contractInstance = new web3.eth.Contract(erc20Abi, balances[i].token, {from: account});
-            erc20contractInstance.methods.decimals().call().then((d) => {
-                erc20contractInstance.methods.symbol().call().then((s) => {
-                    let decimals = d;
-                    let symbol = s;
-                    let amount = new BigNumber(balances[i].amount.toString() + `e-${decimals}`);
-                    let safe_amount = amount.toString();
-                    let table = document.getElementById('lqBody')
-                    if(i == 0) {
-                        table.innerHTML = '';
-                    }
-                    table.innerHTML += formatLQBalance(account, balances[i].token, symbol, safe_amount, i+1);
-                    formatInputListeners(document.getElementById((i+1).toString()));
-                    document.getElementById((i+1).toString() + "_withdraw").disabled = true;
-                });
-            });
-        }
+        balances.reduce((p, balance, i) => {
+            let erc20contractInstance = new web3.eth.Contract(erc20Abi, balance.token, {from: account});
+            let decimals;
+            return p.then(() => erc20contractInstance.methods.decimals().call())
+                    .then((d) => {
+                        decimals = d;
+                        return erc20contractInstance.methods.symbol().call();
+                    })
+                    .then((s) => {
+                        let symbol = s;
+                        let amount = new BigNumber(balance.amount.toString() + `e-${decimals}`);
+                        let safe_amount = amount.toString();
+                        let table = document.getElementById('lqBody');
+                        if(i == 0) {
+                            table.innerHTML = '';
+                        }
+                        table.innerHTML += formatLQBalance(account, balance.token, symbol, safe_amount, i+1);
+                        formatInputListeners(document.getElementById((i+1).toString()));
+                        document.getElementById((i+1).toString() + "_withdraw").disabled = true; 
+                    })
+        }, Promise.resolve() );
         if(balances.length == 0) {
             document.getElementById('lqTable').style.display = "none";
         } else {
