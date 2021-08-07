@@ -36,15 +36,18 @@ function getTxHistory(account) {
 }
 
 function formatTxTable(txns, account) {
-    for(let i = 0; i < txns.length; i++) {
-        let table = document.getElementById('txBody')
-        getTokenSymbol(txns[i].srcToken, account).then((srcSymbol) => {
-            getTokenSymbol(txns[i].destToken, account).then((destSymbol) => {
-                let date = new Date(txns[i].timeStamp);
-                table.innerHTML += formatTxRow(date.toLocaleString(), srcSymbol, txns[i].srcAmount, destSymbol, txns[i].destAmount);
-            });
-        });   
-    }
+    txns.reduce((p, tx, i) => {
+        return p.then(() => getTokenSymbol(tx.srcToken, account))
+                .then((srcSymbol) => {
+                    tx.srcSymbol = srcSymbol;
+                    return getTokenSymbol(tx.destToken, account);
+                })
+                .then((destSymbol) => {
+                    let date = new Date(tx.timeStamp);
+                    let table = document.getElementById('txBody');
+                    table.innerHTML += formatTxRow(date.toLocaleString(), tx.srcSymbol, tx.srcAmount, destSymbol, tx.destAmount);
+                })
+    }, Promise.resolve());
 }
 
 function formatTxRow(time, tokenIn, amountIn, tokenOut, amountOut) {
