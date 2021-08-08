@@ -237,7 +237,7 @@ fa-coins{
   position: relative;
   display: block;
   text-align: center; 
-  left: 11.5px; /* This will move it 20px to the right */
+  left: 11.0px; /* This will move it 20px to the right */
   /* float:left; */
   /*border: 4px solid red;*/
   /* text-align: center; */
@@ -327,6 +327,29 @@ fa-coins{
       align-items: center;
   }
 
+}
+
+input {
+  width: 225px;
+}
+
+
+/* #srcToken {
+  width: 390px
+}
+
+#srcAmount {
+  width: 390px
+} */
+
+.token {
+  position: relative;
+  left: 7px;
+}
+
+.buttons {
+  position: relative;
+  left: 35px;
 }
 
 /* Removes arrows on number input for Chrome, Safari, Edge, Opera */

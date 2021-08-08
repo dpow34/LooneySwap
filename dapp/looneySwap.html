@@ -57,14 +57,17 @@
     <form>
       <div class="looneySwap_container">
         <div>
-          <label for="srcToken">Token :</label>
-          <input type="text" name="srcToken" id="srcToken" oninput="validateInput()">
-          <br>
+          <div class="token">
+            <label for="srcToken">Token :</label>
+            <input type="text" name="srcToken" id="srcToken" oninput="validateInput()">
+          </div>
           <label for="srcAmount">Amount :</label>
           <input type="number" name="srcAmount" id="srcAmount" oninput="validateInput()">
           <br>
-          <button id="looneySwap_button" class="btn btn-primary">LooneySwap</button>
-          <button id="addLiquidity_button" class="btn btn-primary">Add Liquidity</button>
+          <div class="buttons">
+            <button id="looneySwap_button" class="btn btn-primary">LooneySwap</button>
+            <button id="addLiquidity_button" class="btn btn-primary">Add Liquidity</button>
+          </div>
           <br>
           <span id="errorText"></span>
           <div class="row justify-content-center">
