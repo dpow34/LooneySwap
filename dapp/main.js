@@ -240,16 +240,23 @@ function displayDestAmount(destAmount) {
     var decInDest = destAmount.toString().length;
     var destAmntString = destAmount.toString();
     var destVal;
-
+    var wholeNum = decInDest - 18;
     if (decInDest > 18) {
-        var wholeNum = decInDest - 18;
         destVal = destAmntString.substring(0, wholeNum) + "." + destAmntString.substring(wholeNum, destAmntString.length);
     } else {
-        destVal = destAmount / (10**18)
+        destVal = destAmntString.substring(0, 0) + "." + addZeros((wholeNum*-1)) + destAmntString;
     }
 	destinAmount.value = destVal;
 
 }
+
+function addZeros(zerosToAdd){
+    var zeros = "";
+    for (i=0; i<zerosToAdd; i++) {
+        zeros += "0";
+    }
+    return zeros
+} 
 
 // counts number of decimal places number has
 function countDecimalPlaces(srcTokenValue) {
