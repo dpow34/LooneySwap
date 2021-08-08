@@ -17,7 +17,7 @@ module.exports = function(){
 
     /* ------------- Model Functions ------------- */
     const post_user = async function (address){
-        const key = datastore.key([USERS, address]);
+        const key = datastore.key([USERS, address.toLowerCase()]);
         await datastore.save({ "key": key, "data": {}});
         return key;
     }
@@ -30,9 +30,9 @@ module.exports = function(){
     }
 
     const get_user_txns = async function (req){
-        let q = datastore.createQuery(TXNS).filter('owner', req.params.address).order('timeStamp', {
+        let q = datastore.createQuery(TXNS).filter('owner', req.params.address.toLowerCase()).order('timeStamp', {
             descending: true
-          }).limit(NUM_PER_PAGE);
+          });
         const results = {};
         if(Object.keys(req.query).includes("cursor")) {
             q = q.start(req.query.cursor);
@@ -53,10 +53,10 @@ module.exports = function(){
 
     router.post('/', async function(req, res){
         if(req.body.address){
-            const key = datastore.key([USERS, req.body.address]);
+            const key = datastore.key([USERS, req.body.address.toLowerCase()]);
             datastore.get(key, async (err, entity) => {
                 if(!entity) {
-                    const key = await post_user(req.body.address)
+                    const key = await post_user(req.body.address.toLowerCase())
                     datastore.get(key, async (err, entity) => {
                         if(!entity) {
                             console.log(`Error getting created user: ${key.id}`);
@@ -75,7 +75,7 @@ module.exports = function(){
     });
 
     router.get('/:address', async function(req, res){
-        const key = datastore.key([USERS, req.params.address]);
+        const key = datastore.key([USERS, req.params.address.toLowerCase()]);
         datastore.get(key, async (err, entity) => {
             if(!entity) {
                 res.status(404).send(JSON.parse('{"Error": "No user with this address exists"}'));
@@ -88,7 +88,7 @@ module.exports = function(){
     });
 
     router.get('/:address/txns', async function(req, res){
-        const key = datastore.key([USERS, req.params.address]);
+        const key = datastore.key([USERS, req.params.address.toLowerCase()]);
         datastore.get(key, async (err, entity) => {
             if(!entity) {
                 res.status(404).send(JSON.parse('{"Error": "No user with this address exists"}'));

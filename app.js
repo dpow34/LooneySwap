@@ -9,6 +9,14 @@ app.get("/", function(req, res) {
     res.sendFile(__dirname + '/dapp/index.html');
 });
 
+app.get("/looneySwap", function(req, res) {
+  res.sendFile(__dirname + '/dapp/looneySwap.html');
+});
+
+app.get("/txHistory", function(req, res) {
+  res.sendFile(__dirname + '/dapp/txHistory.html');
+});
+
 app.use('/users', require('./users.js'));
 app.use('/txns', require('./txns.js'));
 

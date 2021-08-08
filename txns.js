@@ -14,16 +14,16 @@ module.exports = function(){
 
     /* ------------- Model Functions ------------- */
 
-    const post_txn = async function (txId, ownerAddress, srcToken, srcTokenDecimals, scrAmount, destToken, destTokenDecimals, destAmount){
+    const post_txn = async function (txId, ownerAddress, srcToken, srcTokenDecimals, srcAmount, destToken, destTokenDecimals, destAmount){
         const key = datastore.key([TXNS, txId]);
         const new_txn = {
-            "owner": ownerAddress,
+            "owner": ownerAddress.toLowerCase(),
             "srcToken": srcToken,
             "srcTokenDecimals": srcTokenDecimals,
-            "scrAmount": scrAmount,
+            "srcAmount": srcAmount.toString(),
             "destToken": destToken,
             "destTokenDecimals": destTokenDecimals,
-            "destAmount": destAmount,
+            "destAmount": destAmount.toString(),
             "timeStamp": new Date()
         }
         await datastore.save({ "key": key, "data": new_txn});
@@ -40,17 +40,17 @@ module.exports = function(){
                 req.body.ownerAddress && 
                 req.body.srcToken &&
                 req.body.srcTokenDecimals &&
-                req.body.scrAmount &&
+                req.body.srcAmount &&
                 req.body.destToken &&
                 req.body.destTokenDecimals &&
                 req.body.destAmount
                 ) {
                     const key = await post_txn(
                         req.body.txId,
-                        req.body.ownerAddress, 
+                        req.body.ownerAddress.toLowerCase(), 
                         req.body.srcToken,
                         req.body.srcTokenDecimals,
-                        req.body.scrAmount,
+                        req.body.srcAmount,
                         req.body.destToken,
                         req.body.destTokenDecimals,
                         req.body.destAmount
