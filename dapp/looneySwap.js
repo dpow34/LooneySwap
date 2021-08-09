@@ -178,8 +178,9 @@ function addLiquidity(account, tokenAddress, amount) {
     })
 }
 
-function withdrawLiquidity(account, tokenAddress, amount) {
+function withdrawLiquidity(account, tokenAddress, amountId) {
     getTokenDecimals(tokenAddress, account).then((decimals) => {
+        let amount = document.getElementById(amountId).value;
         let safe_amount = new BigNumber(amount.toString() + `e+${decimals}`);
         contractInstance.methods.withdrawLiquidity(tokenAddress, safe_amount.toString()).send().on('receipt', function(receipt) {
             getLQBalances(account);
@@ -229,7 +230,7 @@ function formatLQBalance(account, tokenAddress, symbol, amount, index) {
                 <td id="${amountId}">${amount}</td>
                 <td><input type="number" name="amount" id="${index}" oninput="validateTableInput('${index}', '${buttonId}')"></td>
                 <td><button class="btn btn-primary" type="button" onclick="inputMaxAmount('${amount}', '${index}')">Max</button></td>
-                <td><button class="btn btn-primary" type="button" id="${buttonId}" onclick="withdrawLiquidity('${account}', '${tokenAddress}', '${amount}')">Withdraw Liquidity</button></td>
+                <td><button class="btn btn-primary" type="button" id="${buttonId}" onclick="withdrawLiquidity('${account}', '${tokenAddress}', '${index}')">Withdraw Liquidity</button></td>
             </tr>`
 }
 
