@@ -52,37 +52,37 @@
     </div>
 
     <!--Swap section-->
-    <form>
-      <div class="swap_container">
-        <div class="left" >
-            <label for="srcToken">Send:</label>
-            <select name="srcToken" id="srcToken" class="tokenSelect" onchange="srcDropDownCheck()">
-              <option>Choose a Token</option>
-            </select>
-            <input type="number" name="srcAmount" id="srcAmount" oninput="validate()">
-            <!-- <span id="errorText"></span> -->
-        </div>
-        <div class="right" >
-            <label for="destToken">Receive:</label>
-            <select name="destToken" id="destToken" class="tokenSelect" onchange="destDropDownCheck()">
-              <option>Choose a Token</option>
-            </select>
-            <input type="text" name="destAmount" id="destAmount" readonly="readonly">
-        </div>
-        <br>
-        <div class="center" >
-          <div class="rangeslider">
-              <input type="range" min="0" max="100" value="10"
-                  class="myslider" id="slippageRange">
-              <p>Slippage: <span id="slippage"></span></p>
-          </div>
-          <span id="errorText"></span>
-          <br>
-          <br>
-          <button id="exchange_button" class="btn btn-primary">Swap Tokens</button>
-        </div>  
+    <div class="swap_container">
+      <div class="swapbox">
+          <form id="swapform">
+            <div class="input-group top" style="width:90%; margin: auto;">
+              <select name="srcToken" id="srcToken" class="tokenSelect" onchange="srcDropDownCheck()" 
+              style="border-radius:15px 0px 0px 15px; background-color: #004e92">
+                  <option>Choose a Token</option>
+              </select>
+              <input
+                type="number" name="srcAmount" id="srcAmount" oninput="validate()"
+                placeholder="   To Send" class="amountInput" >
+            </div>
+
+            <div class="input-group bottom" style="width:90%; margin: auto;">
+              <select name="destToken" id="destToken" class="tokenSelect" onchange="destDropDownCheck()" 
+              style="border-radius:15px 0px 0px 15px; background-color: #004e92">
+                  <option>Choose a Token</option>
+              </select>
+              <input type="text" name="destAmount" id="destAmount" readonly="readonly" placeholder="   To Receive" class="amountInput">
+            </div>
+            <div class="center" >
+              <div class="rangeslider">
+                  <input type="range" min="0" max="100" value="10"
+                      class="myslider" id="slippageRange">
+                  <p>Slippage: <span id="slippage"></span></p>
+            </div>
+            <span id="errorText"></span>
+            <button id="exchange_button" style="width:60%;height:100%;" class="btn btn-primary">Swap Tokens</button>
+        </form>
       </div>
-    </form>
+    </div>
 
     <!--Footer section-->
     <div class="footer">
@@ -95,7 +95,7 @@
             <a href="/" id="reddit" target="/">
               <i class="fab fa-reddit"></i>
             </a>
-            <a href="/" id="github" target="/">
+            <a href="https://github.com/powdrild/LooneySwap" id="github" target="/">
               <i class="fab fa-github"></i>
             </a>
             <a href="/" id="twitter" target="/">

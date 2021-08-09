@@ -5,7 +5,7 @@
   font-family: 'Exo 2', sans-serif;
   box-sizing: border-box;
   /* to check divs uncomment below */
-  /*border: 1px solid red; */
+  /*border: 1px solid red;*/
 }
 
 html{
@@ -51,7 +51,8 @@ fa-coins{
   font-size: 36px;
   filter: brightness(99%);
   /* background-image: linear-gradient(to bottom, #ffffff 10%,#e2dddd 50%, rgb(238, 236, 236) 100%); */
-  background-image: linear-gradient(to top, #003B00 2%,#008F11 6%, #00FF41 100%); 
+  /*background-image: linear-gradient(to top, #003B00 2%,#008F11 6%, #00FF41 100%); original green*/
+  background-image: linear-gradient(to bottom, #000428, #004e92);
   background-size: 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -147,7 +148,9 @@ fa-coins{
       display: flex;
       cursor: pointer;
       /* background-image: linear-gradient(to bottom, #ffffff 10%,#e2dddd 50%, rgb(238, 236, 236) 100%); */
-      background-image: linear-gradient(to top, #003B00 2%,#008F11 6%, #00FF41 100%); 
+      /* old color background-image: linear-gradient(to top, #003B00 2%,#008F11 6%, #00FF41 100%); */
+      background-image: linear-gradient(to bottom, #000428, #004e92);
+
 
   }
 
@@ -176,14 +179,14 @@ fa-coins{
 /* Style of Header */
 .header {
   background-color: #0e0e0e;
-  padding: 50px;
+  padding: 5px;
   text-align: center;
   /*border: 4px solid pink;*/
 }
 
 .header h1{
   font-size: 4rem;
-  background-image: linear-gradient(to bottom, #003B00 10%,#008F11 50%, #00FF41 100%);
+  background-image: linear-gradient(to bottom, #000428, #004e92);
   /* background-image: linear-gradient(to bottom, #ffffff 10%,#e2dddd 50%, rgb(238, 236, 236) 100%); */
   background-size: 100%;
   background-clip: text;
@@ -192,12 +195,13 @@ fa-coins{
   -moz-background-clip: text;
   -moz-text-fill-color: transparent;
   padding: 20px;
-
+  
 }
 
 .header h2{
   font-size: 3rem;
-  background-image: linear-gradient(to top, #0d7b0d 10%,#1b9b2a 50%, #00FF41 100%);
+  background-image: linear-gradient(to bottom, #000428, #004e92);
+  /* original green background-image: linear-gradient(to top, #0d7b0d 10%,#1b9b2a 50%, #00FF41 100%);*/
   /* background-image: linear-gradient(to bottom, #ffffff 10%,#e2dddd 50%, rgb(238, 236, 236) 100%); */
   background-size: 100%;
   background-clip: text;
@@ -223,6 +227,45 @@ fa-coins{
   /*border: 1px solid red;*/
 } 
 
+/* bajo*/
+.swapbox {
+  border-radius: 30px;
+  margin: 0 auto;
+  margin-top: 5px;
+  margin-bottom:5px;
+  width: 510px;
+  height: 360px;
+  background: #000428; 
+  background: -webkit-linear-gradient(to bottom, #004e92, #000428); 
+  background: linear-gradient(to bottom, #004e92, #000428); 
+  position: relative;
+  /*border: 1px solid red;*/ 
+}
+
+#swapform {
+  margin-top: 40px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+ 
+ 
+.amountInput { 
+  font-size: x-large;
+  border-radius:0px 15px 15px 0px;
+  height: 95px;
+  color: whitesmoke;
+  background-color: #1b1e24
+}
+
+.amountInput:focus {
+  outline: none; 
+  border: 3.5px rgba(10,100,255,1) solid;
+  
+}
+
+/* arr */
+
 .looneySwap_container {
   background-color: #0e0e0e;
   display: block;
@@ -238,7 +281,7 @@ fa-coins{
   position: relative;
   display: block;
   text-align: center; 
-  left: 11.0px; /* This will move it 20px to the right */
+  left: 11.5px; /* This will move it 20px to the right */
   /* float:left; */
   /*border: 4px solid red;*/
   /* text-align: center; */
@@ -248,10 +291,15 @@ fa-coins{
 
 .center {
   display: block;
+  margin-top: 20px;
   /*border: 4px solid yellow;*/
   text-align: center;
   /*border: 1px solid red;*/
   color: hsl(0, 0%, 100%);
+  /*
+  width: 100%;
+  height: 20px;
+  margin-top: 20px; borra esto*/
 }
 
 .right {
@@ -329,10 +377,11 @@ fa-coins{
   }
 
 }
-
-input {
+/*
+input { new ones dont know if need to delete
   width: 225px;
 }
+*/
 
 
 /* #srcToken {
@@ -346,12 +395,15 @@ input {
 .token {
   position: relative;
   left: 7px;
+  margin-top: 30px;
+  padding-bottom: 5px;
 }
 
 .buttons {
   position: relative;
   left: 35px;
 }
+
 
 /* Removes arrows on number input for Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

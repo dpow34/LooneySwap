@@ -57,14 +57,17 @@
     <form>
       <div class="looneySwap_container">
         <div>
-          <div class="token">
+          <div class="token" >
             <label for="srcToken">Token :</label>
-            <input type="text" name="srcToken" id="srcToken" oninput="validateInput()">
+            <input type="text" name="srcToken" id="srcToken" oninput="validateInput()"
+            style="color: rgb(180, 178, 178); background-color: #1b1e24; border-radius: 7px; height: 40px;">
           </div>
           <label for="srcAmount">Amount :</label>
-          <input type="number" name="srcAmount" id="srcAmount" oninput="validateInput()">
+          <input type="number" name="srcAmount" id="srcAmount" oninput="validateInput()"
+          style="color: rgb(180, 178, 178); background-color: #1b1e24; border-radius: 7px; height: 40px;">
           <br>
-          <div class="buttons">
+          <br>
+          <div class="buttons" >
             <button id="looneySwap_button" class="btn btn-primary">LooneySwap</button>
             <button id="addLiquidity_button" class="btn btn-primary">Add Liquidity</button>
           </div>
@@ -101,7 +104,7 @@
             <a href="/" id="reddit" target="/">
               <i class="fab fa-reddit"></i>
             </a>
-            <a href="/" id="github" target="/">
+            <a href="https://github.com/powdrild/LooneySwap" id="github" target="/">
               <i class="fab fa-github"></i>
             </a>
             <a href="/" id="twitter" target="/">
