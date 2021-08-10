@@ -449,22 +449,27 @@ function parseTx(receipt, account, srcToken, destToken) {
         getTokenDecimals(destToken, account).then(decimalsOut => {
             let amountIn;
             let amountOut;
-            if(!decodedSwap.amount0In) {
-                amountIn = decodedSwap.amount1In;
+            if(!decodedSwap[0] || decodedSwap[0] == 0) {
+                console.log("here 1");
+                amountIn = 1;
             } else {
-                amountIn = decodedSwap.amount0In;
+                console.log("here 2");
+                amountIn = 0;
             }
-            if(!decodedSwap.amount0out) {
-                amountOut = decodedSwap.amount1Out;
+            if(!decodedSwap[2] || decodedSwap[2] == 0) {
+                amountOut = 3;
+                console.log("here 3");
             } else {
-                amountOut = decodedSwap.amount0Out;
+                amountOut = 2;
+                console.log("here 4");
             }
-            let safe_in = new BigNumber(amountIn.toString() + `e-${decimalsIn}`);
-            let safe_out = new BigNumber(amountOut.toString() + `e-${decimalsOut}`);
+            let safe_in = new BigNumber(decodedSwap[amountIn].toString() + `e-${decimalsIn}`);
+            let safe_out = new BigNumber(decodedSwap[amountOut].toString() + `e-${decimalsOut}`);
             tx.srcTokenDecimals = decimalsIn;
             tx.srcAmount = safe_in.toString();
             tx.destTokenDecimals = decimalsOut;
             tx.destAmount = safe_out.toString();
+            console.log(tx);
             saveTxToDatastore(tx);
         });
     });
@@ -520,7 +525,7 @@ function saveTxToDatastore(tx) {
 
 function getTokenDecimals(tokenAddress, account) {
     let erc20contractInstance;
-    if(tokenAddress == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
+    if(tokenAddress.toLowerCase() == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'.toLowerCase()) {
         return Promise.resolve(18);
     } else {
         try {
